@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+       
+    <property name="LOG_HOME" value="/logs" />
+    <property name="LOG_FORMAT" value="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <!--<logger name="org.springframework.web" level="INFO"/>-->
+    <!--<logger name="com.jlq" level="INFO"/>-->
+       
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>${LOG_FORMAT}</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="colorAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d %green([%thread]) %highlight(%level) %logger{50} - %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <!--<appender name="fileAppender" class="ch.qos.logback.core.FileAppender">-->
+        <!--<encoder>-->
+            <!--<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg %n</Pattern>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+
+    <appender name="hourRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--<File>/data/log/app.log</File>-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <FileNamePattern>${LOG_HOME}/log.%d{yyyy-MM-dd_HH}</FileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>${LOG_FORMAT}</Pattern>
+        </encoder>
+    </appender>
+
+    //不打印swagger的info日志
+    <logger name="springfox.documentation" additivity="false" level="ERROR">
+        <appender-ref ref="consoleAppender" />
+    </logger>
+
+    <!-- 测试环境.开发环境 多个使用逗号隔开. -->
+    <springProfile name="test">
+
+        <!-- for jlq test -->
+        <logger name="com.sponge" additivity="false" level="DEBUG">
+            <appender-ref ref="consoleAppender" />
+        </logger>
+
+        <!-- show parameters for hibernate sponge.sql 专为 Hibernate 定制 -->
+        <!--<logger name="org.hibernate.type.descriptor.sponge.sql.BasicBinder"  level="TRACE" />-->
+        <!--<logger name="org.hibernate.type.descriptor.sponge.sql.BasicExtractor"  level="DEBUG" />-->
+        <!--<logger name="org.hibernate.SQL" level="DEBUG" />-->
+        <!--<logger name="org.hibernate.engine.QueryParameters" level="DEBUG" />-->
+        <!--<logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG" />-->
+
+        <!-- myibatis log config test -->
+        <logger name="com.apache.ibatis" level="TRACE">
+            <appender-ref ref="consoleAppender" />
+        </logger>
+        <logger name="java.sql.Connection" level="DEBUG">
+            <appender-ref ref="consoleAppender" />
+        </logger>
+        <logger name="java.sql.Statement" level="DEBUG">
+            <appender-ref ref="consoleAppender" />
+        </logger>
+        <logger name="java.sql.PreparedStatement" level="DEBUG">
+            <appender-ref ref="consoleAppender" />
+        </logger>
+
+    </springProfile>
+
+    <springProfile name="dev">
+
+        <logger name="com.haimian" additivity="false" level="DEBUG">
+            <appender-ref ref="hourRollingFileAppender"/>
+        </logger>
+
+        <!-- myibatis log config dev -->
+        <logger name="com.apache.ibatis" level="TRACE">
+            <appender-ref ref="hourRollingFileAppender" />
+        </logger>
+        <logger name="java.sql.Connection" level="DEBUG">
+            <appender-ref ref="hourRollingFileAppender" />
+        </logger>
+        <logger name="java.sql.Statement" level="DEBUG">
+            <appender-ref ref="hourRollingFileAppender" />
+        </logger>
+        <logger name="java.sql.PreparedStatement" level="DEBUG">
+            <appender-ref ref="hourRollingFileAppender" />
+        </logger>
+
+    </springProfile>
+       
+    <!-- 生产环境. -->
+    <springProfile name="prod">
+
+        <logger name="com.sponge" additivity="false" level="INFO">
+            <appender-ref ref="hourRollingFileAppender"/>
+        </logger>
+
+        <!-- myibatis log config prod -->
+        <logger name="com.apache.ibatis" level="TRACE">
+            <appender-ref ref="hourRollingFileAppender" />
+        </logger>
+        <logger name="java.sql.Connection" level="DEBUG">
+            <appender-ref ref="hourRollingFileAppender" />
+        </logger>
+        <logger name="java.sql.Statement" level="DEBUG">
+            <appender-ref ref="hourRollingFileAppender" />
+        </logger>
+        <logger name="java.sql.PreparedStatement" level="DEBUG">
+            <appender-ref ref="hourRollingFileAppender" />
+        </logger>
+
+    </springProfile>
+       
+</configuration>
