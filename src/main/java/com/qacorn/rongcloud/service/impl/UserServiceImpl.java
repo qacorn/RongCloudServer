@@ -1,6 +1,7 @@
 package com.qacorn.rongcloud.service.impl;
 
 import com.qacorn.rongcloud.dao.impl.UserDaoImpl;
+import com.qacorn.rongcloud.info.UserInfo;
 import com.qacorn.rongcloud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,5 +16,11 @@ public class UserServiceImpl implements UserService {
     public Long createUser(String userPhone, String userName) {
         Long userId = userDao.insertUser(userPhone, userName);
         return userId;
+    }
+
+    @Override
+    public UserInfo getUserInfo(String userPhone) {
+        UserInfo userInfo = userDao.getUserInfo(userPhone);
+        return userInfo;
     }
 }
