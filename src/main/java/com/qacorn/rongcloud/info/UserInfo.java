@@ -6,14 +6,17 @@ public class UserInfo {
 
     private String userId;
     private String userPhone;
+    private String password;
     private String userName;
     private Byte userStatus;
     private Long createTime;
+    private String userToken;
 
     public static UserInfo build(RongUser rongUser) {
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(rongUser.getUserId());
         userInfo.setUserPhone(rongUser.getUserPhone());
+        userInfo.setPassword(userInfo.getPassword());
         userInfo.setUserName(rongUser.getUserName());
         userInfo.setUserStatus(rongUser.getUserStatus());
         userInfo.setCreateTime(rongUser.getCreateTime().getTime());
@@ -59,5 +62,21 @@ public class UserInfo {
 
     public void setCreateTime(Long createTime) {
         this.createTime = createTime;
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

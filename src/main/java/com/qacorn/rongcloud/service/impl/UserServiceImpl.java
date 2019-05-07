@@ -13,8 +13,8 @@ public class UserServiceImpl implements UserService {
     private UserDaoImpl userDao;
 
     @Override
-    public Long createUser(String userPhone, String userName) {
-        Long userId = userDao.insertUser(userPhone, userName);
+    public Long createUser(String userPhone, String password) {
+        Long userId = userDao.insertUser(userPhone, password);
         return userId;
     }
 

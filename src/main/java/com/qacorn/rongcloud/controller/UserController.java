@@ -28,31 +28,36 @@ public class UserController {
 
     @RequestMapping(value = "/register.json", method = {RequestMethod.POST})
     @ApiOperation(value = "用户注册")
-    public SpongeResult<String> registerWithPhone(@RequestParam String userPhone,
-                                                           @RequestParam String userName
+    public SpongeResult<UserInfo> registerWithPhone(@RequestParam String userPhone,
+                                                           @RequestParam String password
     ) throws SpongeException {
-        LogUtility.debug(UserController.class, "phoneNumber:{},password:{},verifyCode:{}", userPhone, userName);
+        LogUtility.debug(UserController.class, "phoneNumber:{},password:{},verifyCode:{}", userPhone, password);
         if (userPhone.length() != GlobalConstant.PHONE_NUMBER_LENGTH) {
-            return SpongeResultGenerator.getErrorResult(ErrorMessage.PHONE_NUMBER_LENGTH_ERROR);
+            throw new SpongeException(ApiError.PHONE_NUMBER_LENGTH_ERROR);
         }
         if (!ValidateUtility.isMobile(userPhone)) {
-            return SpongeResultGenerator.getErrorResult(ErrorMessage.PHONE_NUMBER_ERROR);
+            throw new SpongeException(ApiError.PHONE_NUMBER_ERROR);
         }
         UserInfo userInfo = userService.getUserInfo(userPhone);
         if (userInfo != null) {
             throw new SpongeException(ApiError.EXIST_USER);
         }
 
-        Long userId = userService.createUser(userPhone, userName);
-        String rongCloudToken = OkHttpUtils.getRongCloudToken(String.valueOf(userId), userName, "");
-        return SpongeResultGenerator.getSuccessResult(rongCloudToken);
-
+        Long userId = userService.createUser(userPhone, password);
+        if (userId > 0) {
+            UserInfo userInfoInsert = userService.getUserInfo(userPhone);
+            String rongCloudToken = OkHttpUtils.getRongCloudToken(String.valueOf(userId), userInfoInsert.getUserName(), "");
+            userInfoInsert.setUserToken(rongCloudToken);
+            return SpongeResultGenerator.getSuccessEntity(userInfoInsert);
+        }else {
+            throw new SpongeException(ApiError.EXIST_USER);
+        }
     }
 
 
     @RequestMapping(value = "/login.json", method = {RequestMethod.POST})
     @ApiOperation(value = "用户登录")
-    public SpongeResult<String> login(@RequestParam String userPhone,
+    public SpongeResult<UserInfo> login(@RequestParam String userPhone,
                                                   @RequestParam String password
     ) throws SpongeException {
         LogUtility.debug(UserController.class, "phoneNumber:{},password:{},verifyCode:{}", userPhone, password);
@@ -62,14 +67,13 @@ public class UserController {
             throw new SpongeException(ApiError.NOT_EXIST_USER);
         }
 
-        if (!password.equals("123456")) {
+        if (!password.equals(userInfo.getPassword())) {
             throw new SpongeException(ApiError.WRONG_PASSWORD);
         }
 
         String rongCloudToken = OkHttpUtils.getRongCloudToken(userInfo.getUserId(), userInfo.getUserName(), "");
-
-        return SpongeResultGenerator.getSuccessResult(rongCloudToken);
-
+        userInfo.setUserToken(rongCloudToken);
+        return SpongeResultGenerator.getSuccessEntity(userInfo);
     }
 
 

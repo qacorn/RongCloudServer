@@ -33,4 +33,7 @@ public class ErrorCode {
 
     public static final int CANNOT_BUY = 400_102;
     public static final int GET_RONG_CLOUD_TOKEN_FAIL = 400_103;
+    public static final int PHONE_NUMBER_LENGTH_ERROR = 400_104;
+    public static final int PHONE_NUMBER_ERROR = 400_105;
+    public static final int REGISTER_FAIL = 400_106;
 }

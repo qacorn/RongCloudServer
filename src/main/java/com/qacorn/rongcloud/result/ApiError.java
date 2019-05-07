@@ -8,7 +8,10 @@ public enum ApiError {
 
     NOT_EXIST_USER(ErrorCode.NOT_EXIST_USER, ErrorMessage.not_exist_user,"not_exist_user",false),
     EXIST_USER(ErrorCode.EXIST_USER, ErrorMessage.exist_user,"exist_user",false),
+    REGISTER_FAIL(ErrorCode.REGISTER_FAIL, ErrorMessage.REGISTER_FAIL,"REGISTER_FAIL",false),
     WRONG_PASSWORD(ErrorCode.WRONG_PASSWORD, ErrorMessage.wrong_password,"wrong password",false),
+    PHONE_NUMBER_LENGTH_ERROR(ErrorCode.PHONE_NUMBER_LENGTH_ERROR, ErrorMessage.PHONE_NUMBER_LENGTH_ERROR,"PHONE_NUMBER_LENGTH_ERROR",false),
+    PHONE_NUMBER_ERROR(ErrorCode.PHONE_NUMBER_ERROR, ErrorMessage.PHONE_NUMBER_ERROR,"PHONE_NUMBER_ERROR",false),
     VERIFY_CODE_ERROR(ErrorCode.VERIFY_CODE_ERROR,ErrorMessage.REGISTER_VERIFY_CODE_ERROR,"verify_code_error",false),
     INVALID_IDENTITY_CARD_NUMBER(ErrorCode.INVALID_IDENTITY_CARD_NUMBER, ErrorMessage.invalid_identity_card_number,"invalid_identity_card_number",false),
     HTTP_EXCEPTION(ErrorCode.HTTP_EXCEPTION, ErrorMessage.http_exception,"http_exception",true),

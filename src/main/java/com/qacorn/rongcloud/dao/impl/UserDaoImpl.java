@@ -21,12 +21,13 @@ public class UserDaoImpl implements UserDao {
     private RongUserMapper rongUserMapper;
 
     @Override
-    public Long insertUser(String userPhone, String userName) {
+    public Long insertUser(String userPhone, String password) {
         RongUser rongUser = new RongUser();
         return RandomUtility.generateRandomId(GlobalConstant.USER_ID_LENGTH,rongUser,(id,argument)->{
             argument.setUserId(String.valueOf(id));
             argument.setUserPhone(userPhone);
-            argument.setUserName(userName);
+            argument.setUserPassword(password);
+            argument.setUserName(userPhone);
             return 1 == rongUserMapper.insertSelective(argument);
         });
     }
